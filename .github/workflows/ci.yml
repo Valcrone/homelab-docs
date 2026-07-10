@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint markdown
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: '**/*.md'
+
+  terraform-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Terraform fmt check
+        run: terraform fmt -check -recursive terraform/
+        continue-on-error: true
+      - name: Terraform validate
+        working-directory: terraform
+        run: |
+          if [ -n "$(find . -name '*.tf' -print -quit 2>/dev/null)" ]; then
+            terraform init -backend=false
+            terraform validate
+          else
+            echo "No .tf files yet, skipping validate"
+          fi
