@@ -1,26 +1,33 @@
-# Phase NN: <Title>
+# Phase NN: [Title]
 
 ## Objective
-<One or two sentences. What state exists after this phase that didn't before.>
+
+One or two sentences. What state exists after this phase that didn't before.
 
 ## Prerequisites
-- <Hardware/software/access required before starting>
+
+- Hardware/software/access required before starting
 
 ## Steps
 
-1. <Action>
-   ```
-   <command>
-   ```
-   Expected output: <what confirms success>
+1. [Action]
 
-2. <Action>
+   ```bash
+   command
+   ```
+
+   Expected output: what confirms success
+
+2. [Action]
 
 ## Verification
-- <Concrete check that confirms the phase is done correctly>
+
+- Concrete check that confirms the phase is done correctly
 
 ## Common Mistakes
-- <Mistake> — <why it happens / how to catch it>
+
+- Mistake, and why it happens or how to catch it
 
 ## Time Estimate
-<X–Y minutes/hours>
+
+X-Y minutes/hours

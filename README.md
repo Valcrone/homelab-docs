@@ -14,6 +14,7 @@ Ubuntu Server 22.04 LTS, bare metal, standalone (not clustered with Node 1). Hos
 Netgear GS305E managed switch, 802.1Q VLAN tagging on physical ports. One port stays untagged for switch management.
 
 **IaC**
+
 - `terraform/` — AWS resources (S3, SNS, IAM)
 - `ansible/` — VM provisioning, agent deployment, OS hardening
 
@@ -28,7 +29,7 @@ Kubernetes and Active Directory — planned as future additions, not part of thi
 
 ## Repo Structure
 
-```
+```text
 homelab-docs/
 ├── docs/           phase-by-phase build documentation
 ├── terraform/      AWS IaC
