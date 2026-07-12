@@ -4,19 +4,19 @@ Two-node homelab build: infrastructure, monitoring, SIEM, ticketing, and IaC pip
 
 ## Architecture
 
-**Node 1 — Dell Precision Tower 3420**
+**Node 1, Dell Precision Tower 3420**
 Proxmox VE hypervisor. Hosts pfSense, Zabbix, and Wazuh as VMs.
 
-**Node 2 — HP EliteDesk 800 G5 Mini**
-Ubuntu Server 22.04 LTS, bare metal, standalone (not clustered with Node 1). Hosts osTicket via Docker.
+**Node 2, HP EliteDesk 800 G5 Mini**
+Ubuntu Server 26.04 LTS, bare metal, standalone (not clustered with Node 1). Hosts osTicket via Docker.
 
 **Network**
 Netgear GS305E managed switch, 802.1Q VLAN tagging on physical ports. One port stays untagged for switch management.
 
 **IaC**
 
-- `terraform/` — AWS resources (S3, SNS, IAM)
-- `ansible/` — VM provisioning, agent deployment, OS hardening
+- `terraform/`: AWS resources (S3, SNS, IAM)
+- `ansible/`: VM provisioning, agent deployment, OS hardening
 
 **Event pipeline**
 Zabbix alert → SNS notification + Lambda archives the relevant Wazuh log snapshot to S3.
@@ -25,7 +25,7 @@ Zabbix alert → SNS notification + Lambda archives the relevant Wazuh log snaps
 GitHub Actions lints markdown and runs `terraform fmt -check` / `terraform validate` on push.
 
 **Deferred**
-Kubernetes and Active Directory — planned as future additions, not part of this build.
+Kubernetes and Active Directory, planned as future additions, not part of this build.
 
 ## Repo Structure
 
@@ -42,7 +42,8 @@ homelab-docs/
 | Phase | Description | Status |
 |-------|-------------|--------|
 | 00 | Repo setup and CI pipeline | Complete |
-| 01 | TBD | Not started |
+| 01 | Network foundation and base OS install | Complete |
+| 02 | TBD | Not started |
 
 ## Release Tags
 
