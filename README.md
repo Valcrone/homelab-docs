@@ -43,7 +43,8 @@ homelab-docs/
 |-------|-------------|--------|
 | 00 | Repo setup and CI pipeline | Complete |
 | 01 | Network foundation and base OS install | Complete |
-| 02 | TBD | Not started |
+| 02 | pfSense deployment and VLAN 10 activation | Complete |
+| 03 | TBD | Not started |
 
 ## Release Tags
 
