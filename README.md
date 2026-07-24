@@ -44,7 +44,7 @@ homelab-docs/
 | Repo Setup | Repo structure and CI pipeline | `docs/00-repo-setup.md` | Complete |
 | Phase 0 | Network foundation and base OS install | `docs/phase0-foundation.md` | Complete |
 | Phase 1 | pfSense deployment and VLAN 10 activation | `docs/phase1-pfsense-deployment.md` | Complete |
-| Phase 2 | TBD | - | Not started |
+| Phase 2 | Zabbix deployment and node monitoring | `docs/phase2-zabbix-deployment.md` | Complete |
 
 ## Release Tags
 
