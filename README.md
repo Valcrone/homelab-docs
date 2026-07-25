@@ -8,7 +8,7 @@ Two-node homelab build: infrastructure, monitoring, SIEM, ticketing, and IaC pip
 Proxmox VE hypervisor. Hosts pfSense, Zabbix, and Wazuh as VMs.
 
 **Node 2, HP EliteDesk 800 G5 Mini**
-Ubuntu Server 26.04 LTS, bare metal, standalone (not clustered with Node 1). Hosts osTicket via Docker.
+Ubuntu Server 26.04 LTS, bare metal, standalone (not clustered with Node 1). Hosts osTicket via Docker. Migrated to VLAN 10 in Phase 4.
 
 **Network**
 Netgear GS305E managed switch, 802.1Q VLAN tagging on physical ports. One port stays untagged for switch management.
@@ -46,6 +46,7 @@ homelab-docs/
 | Phase 1 | pfSense deployment and VLAN 10 activation | `docs/phase1-pfsense-deployment.md` | Complete |
 | Phase 2 | Zabbix deployment and node monitoring | `docs/phase2-zabbix-deployment.md` | Complete |
 | Phase 3 | Wazuh deployment and node monitoring | `docs/phase3-wazuh-deployment.md` | Complete |
+| Phase 4 | Node 2 VLAN 10 migration and osTicket deployment | `docs/phase4-osticket-deployment.md` | Complete |
 
 ## Release Tags
 
