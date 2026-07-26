@@ -1,0 +1,51 @@
+---
+- name: Configure Zabbix agent
+  hosts: monitored_hosts
+  become: true
+
+  vars:
+    pfsense_wan_address: 10.0.0.112
+
+  tasks:
+    - name: Ensure zabbix-agent2 is installed
+      apt:
+        name: zabbix-agent2
+        state: present
+
+    - name: Set Server address
+      lineinfile:
+        path: /etc/zabbix/zabbix_agent2.conf
+        regexp: '^Server='
+        line: "Server={{ zabbix_agent_server }}"
+      register: zabbix_server_line
+
+    - name: Set ServerActive address
+      lineinfile:
+        path: /etc/zabbix/zabbix_agent2.conf
+        regexp: '^ServerActive='
+        line: "ServerActive={{ zabbix_agent_server }}"
+      register: zabbix_serveractive_line
+
+    - name: Set Hostname to match inventory name
+      lineinfile:
+        path: /etc/zabbix/zabbix_agent2.conf
+        regexp: '^Hostname='
+        line: "Hostname={{ inventory_hostname }}"
+      register: zabbix_hostname_line
+
+    - name: Restart zabbix-agent2 if config changed
+      systemd:
+        name: zabbix-agent2
+        state: restarted
+        enabled: true
+      when: zabbix_server_line.changed or zabbix_serveractive_line.changed or zabbix_hostname_line.changed
+
+    - name: Allow Zabbix server to reach this agent through ufw, direct address
+      command: ufw allow from 192.168.1.101 to any port 10050 proto tcp
+      register: zabbix_ufw_rule_direct
+      changed_when: "'Skipping' not in zabbix_ufw_rule_direct.stdout"
+
+    - name: Allow Zabbix server to reach this agent through ufw, NAT-translated pfSense WAN address
+      command: ufw allow from {{ pfsense_wan_address }} to any port 10050 proto tcp
+      register: zabbix_ufw_rule_nat
+      changed_when: "'Skipping' not in zabbix_ufw_rule_nat.stdout"

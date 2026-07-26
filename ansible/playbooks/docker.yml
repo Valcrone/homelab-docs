@@ -1,0 +1,43 @@
+---
+- name: Install Docker
+  hosts: docker_hosts
+  become: true
+
+  tasks:
+    - name: Check if Docker is already installed
+      command: docker --version
+      register: docker_check
+      changed_when: false
+      failed_when: false
+
+    - name: Download Docker convenience install script
+      get_url:
+        url: https://get.docker.com
+        dest: /tmp/get-docker.sh
+        mode: "0755"
+      when: docker_check.rc != 0
+
+    - name: Run Docker install script
+      command: sh /tmp/get-docker.sh
+      when: docker_check.rc != 0
+
+    - name: Add rabih to the docker group
+      user:
+        name: rabih
+        groups: docker
+        append: true
+
+    - name: Force IPv4 preference in Docker daemon, this network has no working IPv6 route
+      copy:
+        dest: /etc/docker/daemon.json
+        content: '{"ip-forward": true, "ipv6": false}'
+        owner: root
+        group: root
+        mode: "0644"
+      register: docker_daemon_config
+
+    - name: Restart Docker if daemon config changed
+      systemd:
+        name: docker
+        state: restarted
+      when: docker_daemon_config.changed

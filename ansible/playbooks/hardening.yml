@@ -1,0 +1,36 @@
+---
+- name: OS hardening baseline
+  hosts: physical_nodes:vms
+  become: true
+
+  tasks:
+    - name: Install unattended-upgrades package
+      apt:
+        name: unattended-upgrades
+        state: present
+        update_cache: true
+
+    - name: Enable unattended security upgrades
+      copy:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        content: |
+          APT::Periodic::Update-Package-Lists "1";
+          APT::Periodic::Unattended-Upgrade "1";
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Install ufw
+      apt:
+        name: ufw
+        state: present
+
+    - name: Allow SSH through ufw before enabling it
+      command: ufw allow OpenSSH
+      register: ufw_allow_ssh
+      changed_when: "'Skipping' not in ufw_allow_ssh.stdout"
+
+    - name: Enable ufw
+      command: ufw --force enable
+      register: ufw_enable
+      changed_when: "'Firewall is active' in ufw_enable.stdout or 'Firewall started' in ufw_enable.stdout"

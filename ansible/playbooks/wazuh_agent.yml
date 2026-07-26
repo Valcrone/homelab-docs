@@ -1,0 +1,69 @@
+---
+- name: Configure Wazuh agent
+  hosts: monitored_hosts
+  become: true
+
+  vars:
+    wazuh_pinned_version: "4.9.0-1"
+
+  tasks:
+    - name: Check if Wazuh apt keyring already exists
+      stat:
+        path: /usr/share/keyrings/wazuh.gpg
+      register: wazuh_keyring
+
+    - name: Download Wazuh GPG key
+      get_url:
+        url: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+        dest: /tmp/GPG-KEY-WAZUH
+        mode: "0644"
+      when: not wazuh_keyring.stat.exists
+
+    - name: Import Wazuh GPG key into dedicated keyring
+      command: gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import /tmp/GPG-KEY-WAZUH
+      when: not wazuh_keyring.stat.exists
+
+    - name: Set correct permissions on keyring
+      file:
+        path: /usr/share/keyrings/wazuh.gpg
+        mode: "0644"
+      when: not wazuh_keyring.stat.exists
+
+    - name: Add Wazuh apt repository
+      copy:
+        dest: /etc/apt/sources.list.d/wazuh.list
+        content: "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main\n"
+        owner: root
+        group: root
+        mode: "0644"
+      register: wazuh_repo_file
+
+    - name: Update apt cache if repo was just added
+      apt:
+        update_cache: true
+      when: wazuh_repo_file.changed
+
+    - name: Install pinned Wazuh agent version
+      apt:
+        name: "wazuh-agent={{ wazuh_pinned_version }}"
+        state: present
+        allow_downgrade: true
+
+    - name: Hold wazuh-agent package to prevent silent version drift
+      dpkg_selections:
+        name: wazuh-agent
+        selection: hold
+
+    - name: Set Wazuh manager address
+      lineinfile:
+        path: /var/ossec/etc/ossec.conf
+        regexp: '<address>.*</address>'
+        line: "      <address>{{ wazuh_agent_server }}</address>"
+      register: wazuh_address_line
+
+    - name: Restart and enable wazuh-agent if config changed
+      systemd:
+        name: wazuh-agent
+        state: restarted
+        enabled: true
+      when: wazuh_address_line.changed

@@ -16,7 +16,7 @@ Netgear GS305E managed switch, 802.1Q VLAN tagging on physical ports. One port s
 **IaC**
 
 - `terraform/`: AWS resources (S3, SNS, IAM)
-- `ansible/`: VM provisioning, agent deployment, OS hardening
+- `ansible/`: OS hardening, Docker installation, and Zabbix/Wazuh agent configuration playbooks
 
 **Event pipeline**
 Zabbix alert → SNS notification + Lambda archives the relevant Wazuh log snapshot to S3.
@@ -48,6 +48,7 @@ homelab-docs/
 | Phase 3 | Wazuh deployment and node monitoring | `docs/phase3-wazuh-deployment.md` | Complete |
 | Phase 4 | Node 2 VLAN 10 migration and osTicket deployment | `docs/phase4-osticket-deployment.md` | Complete |
 | Phase 5 | Terraform and AWS foundation | `docs/phase5-terraform-aws.md` | Complete |
+| Phase 6 | Ansible configuration management | `docs/phase6-ansible.md` | Complete |
 
 ## Release Tags
 
