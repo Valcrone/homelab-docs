@@ -76,3 +76,71 @@ resource "aws_iam_role_policy" "lambda_archive_policy" {
     ]
   })
 }
+
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_dir  = "${path.module}/lambda"
+  output_path = "${path.module}/lambda_archive.zip"
+}
+
+resource "aws_lambda_function" "archive_alerts" {
+  function_name    = "homelab-archive-zabbix-alerts"
+  role             = aws_iam_role.lambda_archive_role.arn
+  handler          = "lambda_function.handler"
+  runtime          = "python3.12"
+  filename         = data.archive_file.lambda_zip.output_path
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  timeout          = 30
+
+  environment {
+    variables = {
+      BUCKET_NAME = aws_s3_bucket.wazuh_logs.id
+    }
+  }
+
+  tags = {
+    Project = "homelab"
+  }
+}
+
+resource "aws_sns_topic_subscription" "lambda_subscription" {
+  topic_arn = aws_sns_topic.zabbix_alerts.arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.archive_alerts.arn
+}
+
+resource "aws_lambda_permission" "allow_sns" {
+  statement_id  = "AllowSNSInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.archive_alerts.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.zabbix_alerts.arn
+}
+
+resource "aws_iam_user" "zabbix_publisher" {
+  name = "zabbix-sns-publisher"
+
+  tags = {
+    Project = "homelab"
+  }
+}
+
+resource "aws_iam_user_policy" "zabbix_publish_policy" {
+  name = "homelab-zabbix-sns-publish"
+  user = aws_iam_user.zabbix_publisher.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "sns:Publish"
+        Resource = aws_sns_topic.zabbix_alerts.arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_access_key" "zabbix_publisher_key" {
+  user = aws_iam_user.zabbix_publisher.name
+}

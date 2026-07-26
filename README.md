@@ -49,6 +49,7 @@ homelab-docs/
 | Phase 4 | Node 2 VLAN 10 migration and osTicket deployment | `docs/phase4-osticket-deployment.md` | Complete |
 | Phase 5 | Terraform and AWS foundation | `docs/phase5-terraform-aws.md` | Complete |
 | Phase 6 | Ansible configuration management | `docs/phase6-ansible.md` | Complete |
+| Phase 7 | Event pipeline (Zabbix to SNS to Lambda to S3) | `docs/phase7-event-pipeline.md` | Complete |
 
 ## Release Tags
 

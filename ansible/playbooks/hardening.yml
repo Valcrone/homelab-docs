@@ -30,6 +30,12 @@
       register: ufw_allow_ssh
       changed_when: "'Skipping' not in ufw_allow_ssh.stdout"
 
+    - name: Allow Proxmox web GUI port on the Proxmox host
+      command: ufw allow 8006/tcp
+      register: ufw_allow_pve_gui
+      changed_when: "'Skipping' not in ufw_allow_pve_gui.stdout"
+      when: "'proxmox' in group_names"
+
     - name: Enable ufw
       command: ufw --force enable
       register: ufw_enable
