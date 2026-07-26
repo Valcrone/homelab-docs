@@ -47,6 +47,7 @@ homelab-docs/
 | Phase 2 | Zabbix deployment and node monitoring | `docs/phase2-zabbix-deployment.md` | Complete |
 | Phase 3 | Wazuh deployment and node monitoring | `docs/phase3-wazuh-deployment.md` | Complete |
 | Phase 4 | Node 2 VLAN 10 migration and osTicket deployment | `docs/phase4-osticket-deployment.md` | Complete |
+| Phase 5 | Terraform and AWS foundation | `docs/phase5-terraform-aws.md` | Complete |
 
 ## Release Tags
 
