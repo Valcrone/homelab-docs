@@ -51,6 +51,14 @@ homelab-docs/
 | Phase 6 | Ansible configuration management | `docs/phase6-ansible.md` | Complete |
 | Phase 7 | Event pipeline (Zabbix to SNS to Lambda to S3) | `docs/phase7-event-pipeline.md` | Complete |
 
+## Support Artifacts
+
+Five closed osTicket tickets (help topics, SLA plans, and full resolution threads) demonstrate the ticketing system in real use, covering an infrastructure incident, a monitoring auto-recovery event, a network migration request, a least-privilege IAM request, and a monitoring configuration follow-up.
+
+| Artifact | Doc |
+|----------|-----|
+| Incident runbook: service unreachable after reboot (disk space) | `docs/incident-runbook-disk-space.md` |
+
 ## Release Tags
 
 Each phase milestone is marked with a git tag instead of a changelog file. See repo tags for history.
