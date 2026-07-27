@@ -4,6 +4,8 @@ Two-node homelab build: infrastructure, monitoring, SIEM, ticketing, and IaC pip
 
 ## Architecture
 
+![Homelab architecture overview](docs/architecture-diagram.svg)
+
 **Node 1, Dell Precision Tower 3420**
 Proxmox VE hypervisor. Hosts pfSense, Zabbix, and Wazuh as VMs.
 
